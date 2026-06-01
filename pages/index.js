@@ -10,7 +10,9 @@ export default function Home() {
     <main>
       <Hero />
       <Marquee />
-      <StoryTeaser />
+      <div id="home-content">
+        <StoryTeaser />
+      </div>
       <MenuHighlights />
       <LocationsTeaser />
       <ReserveCTA />

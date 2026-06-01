@@ -109,6 +109,11 @@ a, button { font-family: inherit; }
   .main-hero-body { padding: 0 24px 100px; }
 }
 
+/* ← ADD THIS RIGHT AFTER */
+@media(max-width:600px) {
+  .main-hero-hint { display:none; }
+}
+
 .main-hero-bg.show { opacity:1; transform:scale(1); }
 .main-hero-vignette { position:absolute; inset:0; background:linear-gradient(to top, rgba(30,10,4,.96) 0%, rgba(30,10,4,.5) 38%, rgba(30,10,4,.08) 68%, transparent 100%); pointer-events:none; }
 .main-hero-vignette-top { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(30,10,4,.5) 0%, transparent 28%); pointer-events:none; }

@@ -152,9 +152,13 @@ export default function Hero() {
             <a href="/story" className="btn-ghost">Our Story</a>
           </div>
         </div>
-        <div className="main-hero-hint">
-          <div className="hint-dot"></div>Discover More
-        </div>
+        <div
+  className="main-hero-hint"
+  onClick={() => document.getElementById('home-content')?.scrollIntoView({ behavior: 'smooth' })}
+  style={{ cursor: 'pointer' }}
+>
+  <div className="hint-dot"></div>Scroll to Discover
+</div>
       </div>
     </section>
   );
