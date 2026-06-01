@@ -72,10 +72,7 @@ export default function Hero() {
 
   return (
     <section className="hero-section" id="home">
-      <div className="slide-dots">
-        <div className="slide-dot on" id="d0"></div>
-        <div className="slide-dot" id="d1"></div>
-      </div>
+      
 
       {/* Slide 1 — Intro */}
       <div className="intro-slide" id="slide1" ref={slide1}>
