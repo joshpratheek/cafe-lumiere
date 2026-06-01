@@ -1,35 +1,19 @@
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import FadeUp from './FadeUp';
 
 export default function StoryTeaser() {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const els = ref.current?.querySelectorAll('.st-reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('st-visible');
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    els?.forEach(el => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
   return (
-    <section className="story-teaser" ref={ref}>
-      <div className="st-img-col st-reveal">
+    <section className="story-teaser">
+      <FadeUp className="st-img-col">
         <img src="/images/about-roastery.png" alt="Café Lumière roastery" />
         <div className="st-img-overlay" />
         <div className="st-year">
           <span className="st-year-num">2009</span>
           <span className="st-year-label">Est. in the old quarter</span>
         </div>
-      </div>
+      </FadeUp>
 
-      <div className="st-content-col st-reveal">
+      <FadeUp className="st-content-col" delay={0.15}>
         <p className="st-eyebrow">Our Roots</p>
         <h2 className="st-heading">
           Brewed from<br /><em>obsession,</em><br />not convenience.
@@ -52,7 +36,7 @@ export default function StoryTeaser() {
         <Link href="/story" className="btn-fill st-cta">
           Read Our Story
         </Link>
-      </div>
+      </FadeUp>
     </section>
   );
 }
