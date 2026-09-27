@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserve a Table — Café Lumière</title>
+<meta name="description" content="Reserve a table at Café Lumière, Hyderabad — we'll call to confirm.">
+<meta property="og:title" content="Café Lumière — Artisan Coffee & Roastery">
+<meta property="og:description" content="Single-origin coffee, scratch-made food, three locations across Hyderabad.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2748%27 fill=%27%23c4623a%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Georgia,serif%27 font-size=%2758%27 font-style=%27italic%27 fill=%27%23fffdf8%27 text-anchor=%27middle%27%3EL%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "name": "Café Lumière",
+  "description": "Artisan coffee roastery and café with three locations in Hyderabad.",
+  "servesCuisine": "Café, Brunch, Coffee",
+  "priceRange": "₹₹",
+  "branchOf": { "@type": "Organization", "name": "Café Lumière" },
+  "location": [
+    { "@type": "Place", "name": "The Original", "address": "Road No. 12, Banjara Hills, Hyderabad" },
+    { "@type": "Place", "name": "The Loft", "address": "Road No. 45, Jubilee Hills, Hyderabad" },
+    { "@type": "Place", "name": "The Kiosk", "address": "Cyber Towers, Hitech City, Hyderabad" }
+  ]
+}
+</script>
+
+<!-- =========================================================
+  GLOBAL SETUP CSS
+  Keep only shared colours, fonts, cursor, reveal animation here.
+  Images needed:
+  images/sliding-bg.png
+  images/hero-bg.png
+  images/about-roastery.png
+  images/founder.png
+========================================================= -->
+<style>
+:root {
+  --cream: #faf3e8;
+  --cream-mid: #f2e4cc;
+  --terra: #c4623a;
+  --terra-light: #d97b52;
+  --terra-pale: #e8b89a;
+  --terra-muted: #a04e2c;
+  --brown-deep: #2e1a0e;
+  --brown-mid: #5c3520;
+  --warm-white: #fffdf8;
+  --text-dark: #1e0f06;
+  --text-mid: #6b3e26;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: var(--brown-deep);
+  color: var(--warm-white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: auto;
+}
+
+a, button { font-family: inherit; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--terra-light);
+  outline-offset: 3px;
+}
+
+.grain {
+  position: fixed;
+  inset: -30%;
+  z-index: 400;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px;
+  mix-blend-mode: overlay;
+  opacity: .055;
+  animation: gshift .45s steps(5) infinite;
+}
+
+@keyframes gshift {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-4%,-4%); }
+  40% { transform: translate(4%,-3%); }
+  60% { transform: translate(-3%,4%); }
+  80% { transform: translate(4%,3%); }
+  100% { transform: translate(0,0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes kburns { to { transform: scale(1); } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .2; } }
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+  GLOBAL DECOR HTML
+========================================================= -->
+<div class="grain"></div>
+
+<!-- =========================================================
+  SECTION 1: NAVBAR
+========================================================= -->
+<style>
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 28px;
+  padding: 18px 44px;
+  background: rgba(20,10,4,.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,253,248,.06);
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--warm-white);
+  justify-self: start;
+}
+.nav-logo em { font-style: italic; color: var(--terra-light); }
+.nav-links { display: flex; justify-content: center; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,253,248,.55);
+  text-decoration: none;
+  transition: color .3s;
+}
+.nav-mobile-cta { display: none; }
+.nav-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: var(--terra);
+  color: var(--warm-white);
+  border: none;
+  padding: 9px 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background .3s;
+  justify-self: end;
+}
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 2px;
+  justify-self: end;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--warm-white);
+  margin: 5px 0;
+  transition: transform .25s, opacity .25s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+@media(max-width:900px) {
+  .navbar { grid-template-columns: auto 1fr auto; padding: 14px 20px; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    background: rgba(15,7,3,.97);
+    padding: 8px 24px 22px;
+    border-bottom: 1px solid rgba(255,253,248,.08);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px 0; width: 100%; font-size: 11.5px; }
+  .nav-mobile-cta {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .nav-mobile-cta a {
+    display: inline-block;
+    background: var(--terra);
+    color: var(--warm-white);
+    padding: 11px 24px;
+    border-radius: 2px;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-btn { display: none; }
+  .nav-toggle { display: block; }
+}
+</style>
+<nav class="navbar">
+  <a href="index.html" class="nav-logo" style="text-decoration:none;">Café <em>Lumière</em></a>
+  <ul class="nav-links" id="navLinksList">
+    <li><a href="index.html#about">Story</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="index.html#locations">Locations</a></li>
+    <li><a href="index.html#gallery">Gallery</a></li>
+    <li class="nav-mobile-cta"><a href="reserve.html">Reserve a Table</a></li>
+  </ul>
+  <a class="nav-btn" href="reserve.html">Reserve a Table</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<script>
+(function() {
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinksList');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+})();
+</script>
+<!-- =========================================================
+  SECTION 6: RESERVE + PAY SECTION
+========================================================= -->
+<style>
+
+  .reserve-section {
+    --bg-deep:    #1a1008;
+    --bg-dark:    #231508;
+    --bg-card:    #2b1c0e;
+    --bg-input:   #1e1208;
+    --border:     rgba(180, 120, 60, 0.18);
+    --border-hover: rgba(200, 140, 70, 0.4);
+    --accent:     #c8783c;
+    --accent-light: #e09255;
+    --accent-glow: rgba(200, 120, 60, 0.15);
+    --text-primary: #f0e4d0;
+    --text-muted:  #9e8672;
+    --text-faint:  #6b5540;
+    --gold:       #d4a855;
+  }
+
+  .reserve-section {
+    padding: 100px 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .reserve-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .reserve-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.7;
+    display: inline-block;
+  }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 5vw, 58px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+  .section-heading em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .section-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  .reserve-form-wrap {
+    max-width: 620px;
+  }
+
+  .hours-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    margin: 0 0 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11.5px;
+    color: var(--text-faint);
+  }
+  .hours-inline strong {
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-right: 6px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .reserve-section label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .reserve-section input, .reserve-section select, .reserve-section textarea {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .reserve-section input::placeholder, .reserve-section textarea::placeholder { color: var(--text-faint); }
+  .reserve-section input:focus, .reserve-section select:focus, .reserve-section textarea:focus { border-color: var(--border-hover); }
+  .reserve-section select { cursor: pointer; }
+  .reserve-section select option { background: var(--bg-dark); }
+  .reserve-section textarea { resize: vertical; min-height: 90px; }
+
+  .location-chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .chip {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 10px 20px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .chip.selected {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent-light);
+  }
+  .chip-label { font-size: 9px; display: block; color: var(--text-faint); margin-top: 3px; letter-spacing: 0.1em; }
+
+  .btn-primary {
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    border-radius: 2px;
+    color: #1a1008;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    margin-top: 24px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-outline {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  .success-msg {
+    display: none;
+    background: rgba(15, 110, 86, 0.15);
+    border: 1px solid rgba(15, 110, 86, 0.3);
+    border-radius: 2px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #5DCAA5;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .accent-bar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 3px;
+    height: 120px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    opacity: 0.5;
+  }
+
+  @media (max-width: 860px) {
+    .reserve-container { padding: 0 24px; }
+    .form-row.triple { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .form-row, .form-row.triple { grid-template-columns: 1fr; }
+    .hours-inline { flex-direction: column; gap: 6px; }
+  }
+
+</style>
+<section class="reserve-section" id="reserve">
+  <div class="accent-bar"></div>
+  <div class="reserve-container">
+
+    <h2 class="section-heading">Secure your seat,<br><em>savour the moment.</em></h2>
+    <p class="section-sub">Every table is set with care. Fill in your details below and we'll call to confirm.</p>
+
+    <div class="reserve-form-wrap">
+
+      <div class="location-chips" id="locationChips">
+        <div class="chip selected" onclick="selectChip(this)">
+          The Original
+          <span class="chip-label">Banjara Hills</span>
+        </div>
+        <div class="chip" onclick="selectChip(this)">
+          The Loft
+          <span class="chip-label">Jubilee Hills</span>
+        </div>
+        <div class="chip" onclick="selectChip(this)">
+          The Kiosk
+          <span class="chip-label">Hitech City</span>
+        </div>
+      </div>
+
+      <div class="hours-inline">
+        <span><strong>The Original</strong> 7:00 AM – 10:00 PM</span>
+        <span><strong>The Loft</strong> 9:00 AM – 11:00 PM</span>
+        <span><strong>The Kiosk</strong> 6:30 AM – 8:00 PM</span>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="fname">First Name</label>
+          <input type="text" id="fname" placeholder="Arjun">
+        </div>
+        <div class="field">
+          <label for="lname">Last Name</label>
+          <input type="text" id="lname" placeholder="Mehta">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="arjun@email.com">
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" class="phone-input" inputmode="numeric" maxlength="10" placeholder="9876543210">
+        </div>
+      </div>
+
+      <div class="form-row triple">
+        <div class="field">
+          <label for="rdate">Date</label>
+          <input type="date" id="rdate">
+        </div>
+        <div class="field">
+          <label for="rtime">Time</label>
+          <select id="rtime">
+            <option value="">Select</option>
+            <option>7:00 AM</option>
+            <option>7:30 AM</option>
+            <option>8:00 AM</option>
+            <option>9:00 AM</option>
+            <option>10:00 AM</option>
+            <option>11:00 AM</option>
+            <option>12:00 PM</option>
+            <option>1:00 PM</option>
+            <option>6:00 PM</option>
+            <option>7:00 PM</option>
+            <option>8:00 PM</option>
+            <option>9:00 PM</option>
+            <option>10:00 PM</option>
+            <option>11:00 PM</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="guests">Guests</label>
+          <select id="guests">
+            <option>1 person</option>
+            <option selected>2 people</option>
+            <option>3 people</option>
+            <option>4 people</option>
+            <option>5 people</option>
+            <option>6+ people</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row single">
+        <div class="field">
+          <label for="notes">Special Requests</label>
+          <textarea id="notes" placeholder="Anniversary dinner, window seat, dietary requirements…"></textarea>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="handleReserve()">Confirm Reservation</button>
+      <div class="success-msg" id="reserveSuccess">✓ &nbsp;Request received! Call us at <strong>6309772853</strong> to confirm your table.</div>
+
+    </div>
+  </div>
+</section>
+<script>
+
+  function selectChip(el) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function handleReserve() {
+    const msg = document.getElementById('reserveSuccess');
+    msg.style.display = 'block';
+  }
+
+  document.querySelectorAll('.phone-input').forEach(input => {
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/[^0-9]/g, '').slice(0, 10);
+    });
+  });
+
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('rdate').min = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  document.getElementById('rdate').value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+
+</script>
+<!-- =========================================================
+  SECTION 7: FOOTER
+========================================================= -->
+<style>
+.site-footer {
+  position: relative;
+  background: var(--brown-deep);
+  border-top: 1px solid rgba(255,253,248,.07);
+  padding: 88px 80px 40px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.1fr;
+  gap: 48px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid rgba(255,253,248,.07);
+}
+.footer-brand-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--warm-white); margin-bottom: 18px; }
+.footer-brand-logo em { font-style: italic; color: var(--terra-light); }
+.footer-brand-desc { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; line-height: 1.75; color: rgba(255,253,248,.42); max-width: 300px; margin-bottom: 26px; }
+.footer-col-title { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--terra-light); margin-bottom: 22px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+.footer-links a { color: rgba(255,253,248,.5); text-decoration: none; font-size: 13.5px; transition: color .3s; }
+.footer-branch { margin-bottom: 20px; }
+.footer-branch:last-child { margin-bottom: 0; }
+.footer-branch-name { font-size: 13.5px; color: var(--warm-white); margin-bottom: 4px; display: block; }
+.footer-branch-addr { font-size: 12px; color: rgba(255,253,248,.38); line-height: 1.6; }
+.footer-newsletter-desc { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 300; line-height: 1.7; color: rgba(255,253,248,.42); margin-bottom: 22px; }
+.footer-newsletter-form { display: flex; border: 1px solid rgba(255,253,248,.15); border-radius: 2px; overflow: hidden; }
+.footer-newsletter-form input {
+  flex: 1; background: none; border: none; outline: none;
+  padding: 13px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  color: var(--warm-white);
+}
+.footer-newsletter-form input::placeholder { color: rgba(255,253,248,.32); }
+.footer-newsletter-form button {
+  background: var(--terra); color: var(--warm-white); border: none;
+  padding: 0 18px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  cursor: pointer; transition: background .3s;
+  flex-shrink: 0;
+}
+.footer-newsletter-msg { font-size: 11.5px; color: var(--terra-light); margin-top: 12px; display: none; }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; padding-top: 32px; flex-wrap: wrap;
+}
+.footer-copy { font-size: 11.5px; color: rgba(255,253,248,.3); }
+.footer-legal { display: flex; gap: 28px; }
+.footer-legal a { font-size: 11.5px; color: rgba(255,253,248,.3); text-decoration: none; transition: color .3s; }
+@media(max-width:1024px) {
+  .footer-top { grid-template-columns: 1fr 1fr; row-gap: 44px; }
+}
+@media(max-width:640px) {
+  .site-footer { padding: 64px 24px 32px; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+</style>
+<footer class="site-footer" aria-label="Site footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-logo">Café <em>Lumière</em></div>
+      <p class="footer-brand-desc">Small-batch roasted, hand-poured, made from scratch — since 2009. Three rooms across Hyderabad, one standard.</p>
+    </div>
+    <div>
+      <p class="footer-col-title">Explore</p>
+      <ul class="footer-links">
+        <li><a href="index.html#about">Our Story</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="index.html#gallery">Gallery</a></li>
+        <li><a href="reserve.html">Reserve a Table</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Visit Us</p>
+      <div class="footer-branch">
+        <span class="footer-branch-name">The Original</span>
+        <p class="footer-branch-addr">Road No. 12, Banjara Hills, Hyderabad<br>+91 40 2354 1201</p>
+      </div>
+      <div class="footer-branch">
+        <span class="footer-branch-name">The Loft</span>
+        <p class="footer-branch-addr">Road No. 45, Jubilee Hills, Hyderabad<br>+91 40 2354 1202</p>
+      </div>
+      <div class="footer-branch">
+        <span class="footer-branch-name">The Kiosk</span>
+        <p class="footer-branch-addr">Cyber Towers, Hitech City, Hyderabad<br>+91 40 2354 1203</p>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Stay in the Loop</p>
+      <p class="footer-newsletter-desc">New seasonal drinks, menu drops, and the odd table for two — straight to your inbox.</p>
+      <form class="footer-newsletter-form" onsubmit="return handleNewsletter(event)">
+        <input type="email" placeholder="Your email address" required aria-label="Email address for newsletter">
+        <button type="submit">Join</button>
+      </form>
+      <p class="footer-newsletter-msg" id="newsletterMsg">✓ You're on the list. Welcome to Lumière.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© <span id="year"></span> Café Lumière. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="mailto:hello@cafelumiere.in">hello@cafelumiere.in</a>
+    </div>
+  </div>
+</footer>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+function handleNewsletter(e) {
+  e.preventDefault();
+  const msg = document.getElementById('newsletterMsg');
+  msg.style.display = 'block';
+  e.target.reset();
+  setTimeout(() => { msg.style.display = 'none'; }, 5000);
+  return false;
+}
+</script>
+
+</body>
+</html>

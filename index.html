@@ -3,10 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café Lumière — Artisan Coffee & Roastery</title>
+<title>Café Lumière — Artisan Coffee & Roastery, Hyderabad</title>
+<meta name="description" content="Café Lumière is an artisan coffee roastery in Hyderabad — single-origin pour overs, scratch-made brunch, and three neighbourhood locations across Banjara Hills, Jubilee Hills and Hitech City.">
+<meta property="og:title" content="Café Lumière — Artisan Coffee & Roastery">
+<meta property="og:description" content="Single-origin coffee, scratch-made food, three locations across Hyderabad.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2748%27 fill=%27%23c4623a%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Georgia,serif%27 font-size=%2758%27 font-style=%27italic%27 fill=%27%23fffdf8%27 text-anchor=%27middle%27%3EL%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "name": "Café Lumière",
+  "description": "Artisan coffee roastery and café with three locations in Hyderabad.",
+  "servesCuisine": "Café, Brunch, Coffee",
+  "priceRange": "₹₹",
+  "branchOf": { "@type": "Organization", "name": "Café Lumière" },
+  "location": [
+    { "@type": "Place", "name": "The Original", "address": "Road No. 12, Banjara Hills, Hyderabad" },
+    { "@type": "Place", "name": "The Loft", "address": "Road No. 45, Jubilee Hills, Hyderabad" },
+    { "@type": "Place", "name": "The Kiosk", "address": "Cyber Towers, Hitech City, Hyderabad" }
+  ]
+}
+</script>
 
 <!-- =========================================================
   GLOBAL SETUP CSS
@@ -36,6 +58,11 @@
 
 html { scroll-behavior: smooth; }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
 html, body {
   width: 100%;
   min-height: 100%;
@@ -43,33 +70,13 @@ html, body {
   color: var(--warm-white);
   font-family: 'DM Sans', sans-serif;
   overflow-x: hidden;
-  cursor: none;
+  cursor: auto;
 }
 
 a, button { font-family: inherit; }
-
-#cur {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  background: var(--terra);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform .2s, background .2s;
-}
-
-#curf {
-  position: fixed;
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid rgba(196,98,58,.45);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: left .1s cubic-bezier(.16,1,.3,1), top .1s cubic-bezier(.16,1,.3,1), transform .3s;
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--terra-light);
+  outline-offset: 3px;
 }
 
 .grain {
@@ -101,10 +108,6 @@ a, button { font-family: inherit; }
 @keyframes kburns { to { transform: scale(1); } }
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .2; } }
 
-@media(max-width:900px) {
-  body { cursor: auto; }
-  #cur, #curf { display: none; }
-}
 </style>
 </head>
 
@@ -113,42 +116,10 @@ a, button { font-family: inherit; }
 <!-- =========================================================
   GLOBAL DECOR HTML
 ========================================================= -->
-<div id="cur"></div>
-<div id="curf"></div>
 <div class="grain"></div>
 
 <!-- =========================================================
-  GLOBAL CURSOR JS
-========================================================= -->
-<script>
-const cur = document.getElementById('cur');
-const curf = document.getElementById('curf');
-
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px';
-  cur.style.top = e.clientY + 'px';
-  curf.style.left = e.clientX + 'px';
-  curf.style.top = e.clientY + 'px';
-});
-
-document.addEventListener('mouseover', e => {
-  if (e.target.closest('a, button, .menu-card, .branch-card')) {
-    cur.style.transform = 'translate(-50%,-50%) scale(3)';
-    curf.style.transform = 'translate(-50%,-50%) scale(0)';
-  }
-});
-
-document.addEventListener('mouseout', e => {
-  if (e.target.closest('a, button, .menu-card, .branch-card')) {
-    cur.style.transform = 'translate(-50%,-50%) scale(1)';
-    curf.style.transform = 'translate(-50%,-50%) scale(1)';
-  }
-});
-</script>
-
-<!-- =========================================================
   SECTION 1: NAVBAR
-  CSS + HTML in one place
 ========================================================= -->
 <style>
 .navbar {
@@ -157,62 +128,137 @@ document.addEventListener('mouseout', e => {
   left: 0;
   right: 0;
   z-index: 300;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  padding: 36px 60px;
+  column-gap: 28px;
+  padding: 18px 44px;
+  background: rgba(20,10,4,.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,253,248,.06);
 }
 .nav-logo {
   font-family: 'Playfair Display', serif;
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 700;
-  letter-spacing: .03em;
+  letter-spacing: .02em;
   color: var(--warm-white);
+  justify-self: start;
 }
 .nav-logo em { font-style: italic; color: var(--terra-light); }
-.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links { display: flex; justify-content: center; gap: 36px; list-style: none; }
 .nav-links a {
-  font-size: 11.5px;
-  letter-spacing: .18em;
+  font-size: 10.5px;
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: rgba(255,253,248,.55);
   text-decoration: none;
   transition: color .3s;
 }
-.nav-links a:hover { color: var(--terra-light); }
+.nav-mobile-cta { display: none; }
 .nav-btn {
-  font-size: 11px;
-  letter-spacing: .16em;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: .12em;
   text-transform: uppercase;
   background: var(--terra);
   color: var(--warm-white);
   border: none;
-  padding: 11px 26px;
+  padding: 9px 20px;
   border-radius: 2px;
-  cursor: none;
-  transition: background .3s, transform .25s;
+  cursor: pointer;
+  transition: background .3s;
+  justify-self: end;
 }
-.nav-btn:hover { background: var(--terra-muted); transform: translateY(-2px); }
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 2px;
+  justify-self: end;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--warm-white);
+  margin: 5px 0;
+  transition: transform .25s, opacity .25s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 @media(max-width:900px) {
-  .navbar { padding: 24px; }
-  .nav-links { display: none; }
-  .nav-btn { padding: 10px 18px; font-size: 10px; }
+  .navbar { grid-template-columns: auto 1fr auto; padding: 14px 20px; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    background: rgba(15,7,3,.97);
+    padding: 8px 24px 22px;
+    border-bottom: 1px solid rgba(255,253,248,.08);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px 0; width: 100%; font-size: 11.5px; }
+  .nav-mobile-cta {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .nav-mobile-cta a {
+    display: inline-block;
+    background: var(--terra);
+    color: var(--warm-white);
+    padding: 11px 24px;
+    border-radius: 2px;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-btn { display: none; }
+  .nav-toggle { display: block; }
 }
 </style>
 <nav class="navbar">
   <div class="nav-logo">Café <em>Lumière</em></div>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinksList">
     <li><a href="#about">Story</a></li>
-    <li><a href="#menu">Menu</a></li>
+    <li><a href="menu.html">Menu</a></li>
     <li><a href="#locations">Locations</a></li>
-    <li><a href="#">Journal</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li class="nav-mobile-cta"><a href="reserve.html">Reserve a Table</a></li>
   </ul>
-  <button class="nav-btn" onclick="document.getElementById('reserve')?.scrollIntoView({behavior:'smooth'})">Reserve a Table</button>
+  <a class="nav-btn" href="reserve.html">Reserve a Table</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
-
+<script>
+(function() {
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinksList');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+})();
+</script>
 <!-- =========================================================
   SECTION 2: HERO + SLIDING INTRO
-  CSS + HTML + JS in one place
 ========================================================= -->
 <style>
 .hero-section {
@@ -221,19 +267,6 @@ document.addEventListener('mouseout', e => {
   overflow: hidden;
   background: var(--brown-deep);
 }
-.slide-dots {
-  position: fixed;
-  right: 56px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 350;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  align-items: center;
-}
-.slide-dot { width: 5px; height: 5px; border-radius: 3px; background: rgba(255,253,248,.22); transition: all .5s cubic-bezier(.16,1,.3,1); }
-.slide-dot.on { background: var(--terra-light); height: 18px; }
 .intro-slide { position: absolute; inset: 0; z-index: 2; transform: translateY(0); will-change: transform; transition: transform 1.3s cubic-bezier(.77,0,.18,1); }
 .intro-slide.up { transform: translateY(-100%); }
 .intro-bg {
@@ -258,9 +291,6 @@ document.addEventListener('mouseout', e => {
 .intro-stats { display: flex; gap: 40px; flex-shrink: 0; opacity: 0; animation: fadeUp .8s .75s cubic-bezier(.16,1,.3,1) forwards; }
 .intro-stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--warm-white); display: block; }
 .intro-stat-label { font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,253,248,.35); margin-top: 3px; display: block; }
-.intro-progress { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,253,248,.08); }
-.intro-progress-fill { height: 100%; width: 0%; background: var(--terra-light); }
-.intro-progress-fill.go { width: 100%; transition: width 3s linear; }
 .main-hero { position: absolute; inset: 0; z-index: 1; background: var(--brown-deep); }
 .main-hero-bg {
   position: absolute;
@@ -282,32 +312,24 @@ document.addEventListener('mouseout', e => {
 .main-hero-title { font-family: 'Playfair Display', serif; font-size: clamp(46px,6.8vw,94px); line-height: .98; color: var(--warm-white); margin-bottom: 36px; }
 .main-hero-title em { color: var(--terra-light); font-style: italic; }
 .main-hero-buttons { display: flex; gap: 16px; }
-.btn-fill, .btn-ghost { font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; padding: 15px 38px; border-radius: 2px; text-decoration: none; cursor: none; transition: background .3s, transform .25s, border-color .3s, color .3s; display: inline-block; }
+.btn-fill, .btn-ghost { font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; padding: 15px 38px; border-radius: 2px; text-decoration: none; cursor: pointer; transition: background .3s, transform .25s, border-color .3s, color .3s; display: inline-block; }
 .btn-fill { background: var(--terra); color: var(--warm-white); }
-.btn-fill:hover { background: var(--terra-muted); transform: translateY(-2px); }
 .btn-ghost { color: rgba(255,253,248,.55); border: 1px solid rgba(255,253,248,.18); }
-.btn-ghost:hover { border-color: var(--terra-light); color: var(--terra-light); transform: translateY(-2px); }
 .main-hero-hint { position: absolute; bottom: 56px; right: 60px; display: flex; align-items: center; gap: 9px; font-size: 9.5px; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,253,248,.28); }
 .hint-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--terra-light); animation: blink 2.2s ease-in-out infinite; }
 @media(max-width:900px) {
-  .slide-dots { right: 20px; }
-  .intro-body, .main-hero-body { padding: 0 24px 52px; }
+    .intro-body, .main-hero-body { padding: 0 24px 52px; }
   .intro-stats { display: none; }
   .main-hero-hint { display: none; }
   .main-hero-buttons { flex-direction: column; align-items: flex-start; }
 }
 </style>
 <section class="hero-section" id="home">
-  <div class="slide-dots">
-    <div class="slide-dot on" id="d0"></div>
-    <div class="slide-dot" id="d1"></div>
-  </div>
   <div class="intro-slide" id="slide1">
     <div class="intro-bg"></div>
     <div class="intro-vignette-top"></div>
     <div class="intro-vignette-bottom"></div>
     <div class="intro-body">
-      <div class="intro-tag">Artisan Café &amp; Roastery · Est. 2009</div>
       <h1 class="intro-title">A place that<br>feels like <em>home.</em></h1>
       <div class="intro-row">
         <p class="intro-sub">Come for the coffee. Stay for the warmth. Return because nothing else quite compares.</p>
@@ -318,17 +340,15 @@ document.addEventListener('mouseout', e => {
         </div>
       </div>
     </div>
-    <div class="intro-progress"><div class="intro-progress-fill" id="pf"></div></div>
   </div>
   <div class="main-hero" id="slide2">
     <div class="main-hero-bg" id="heroBgImage"></div>
     <div class="main-hero-vignette-top"></div>
     <div class="main-hero-vignette"></div>
     <div class="main-hero-body">
-      <div class="main-hero-eyebrow">Single Origin · Hand Poured · Made with Love</div>
       <h2 class="main-hero-title">Every pour,<br>a little <em>warmer.</em></h2>
       <div class="main-hero-buttons">
-        <a href="#menu" class="btn-fill">Explore the Menu</a>
+        <a href="menu.html" class="btn-fill">Explore the Menu</a>
         <a href="#about" class="btn-ghost">Our Story</a>
       </div>
     </div>
@@ -337,27 +357,18 @@ document.addEventListener('mouseout', e => {
 <script>
 const slide1 = document.getElementById('slide1');
 const heroBgImage = document.getElementById('heroBgImage');
-const progressFill = document.getElementById('pf');
-const d0 = document.getElementById('d0');
-const d1 = document.getElementById('d1');
 let gone = false;
 function toSlide2() {
   if (gone) return;
   gone = true;
   slide1.classList.add('up');
   setTimeout(() => heroBgImage.classList.add('show'), 650);
-  setTimeout(() => document.getElementById('marqueeStrip')?.classList.add('visible'), 1000);
-  d0.classList.remove('on');
-  d1.classList.add('on');
 }
 window.addEventListener('load', () => {
-  setTimeout(() => progressFill.classList.add('go'), 80);
   setTimeout(toSlide2, 3000);
 });
 slide1.addEventListener('click', () => {
   if (!gone) {
-    progressFill.style.transition = 'none';
-    progressFill.style.width = '100%';
     setTimeout(toSlide2, 60);
   }
 });
@@ -365,69 +376,14 @@ document.addEventListener('keydown', e => {
   if ((e.key === 'ArrowDown' || e.key === ' ') && !gone) toSlide2();
 });
 </script>
-
-<!-- =========================================================
-  SECTION 3: MARQUEE STRIP
-  CSS + HTML + JS in one place
-========================================================= -->
-<style>
-.marquee-strip {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 250;
-  background: var(--terra);
-  padding: 12px 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(100%);
-  transition: opacity .7s ease, transform .9s cubic-bezier(.16,1,.3,1);
-}
-.marquee-strip.visible { opacity: 1; transform: translateY(0); }
-.marquee-track { display: inline-flex; align-items: center; animation: marquee-scroll 32s linear infinite; will-change: transform; }
-.marquee-strip:hover .marquee-track { animation-play-state: paused; }
-@keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.marquee-item { display: inline-flex; align-items: center; padding: 0 30px; font-size: 10px; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,253,248,.85); white-space: nowrap; }
-.marquee-item::after { content: '◆'; font-size: 5px; color: rgba(255,253,248,.35); margin-left: 30px; }
-@media(max-width:900px) { .marquee-item { font-size: 9px; padding: 0 18px; } }
-</style>
-<aside class="marquee-strip" id="marqueeStrip" aria-hidden="true" role="presentation">
-  <div class="marquee-track" id="marqueeTrack"></div>
-</aside>
-<script>
-const keywords = [
-  'Specialty Coffee · Hyderabad',
-  'Single-Origin Pour Overs',
-  'Artisan Café & Roastery',
-  'Farm-to-Cup Direct Trade',
-  'Hand-Crafted Espresso Drinks',
-  'Award-Winning Baristas',
-  'Seasonal Brunch Menu',
-  'Private Dining & Events',
-  'Freshly Roasted Beans Daily',
-  'Best Café in the City'
-];
-const marqueeTrack = document.getElementById('marqueeTrack');
-[...keywords, ...keywords].forEach(text => {
-  const item = document.createElement('span');
-  item.className = 'marquee-item';
-  item.textContent = text;
-  marqueeTrack.appendChild(item);
-});
-</script>
-
 <!-- =========================================================
   SECTION 4: ABOUT SLIDING SECTION
-  CSS + HTML + JS in one place
 ========================================================= -->
 <style>
 .about-section { position: relative; background: var(--brown-deep); overflow: hidden; }
 .about-a { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
 .about-a-img { position: relative; overflow: hidden; background: #1a0d06; }
 .about-a-img img { width: 100%; height: 100%; object-fit: cover; filter: sepia(18%) contrast(1.08) brightness(.88); transform: scale(1.04); transition: transform 8s ease; }
-.about-a-img:hover img { transform: scale(1); }
 .about-a-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, var(--brown-deep) 100%); pointer-events: none; }
 .year-stamp { position: absolute; bottom: 52px; left: 48px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 .year-stamp-num { font-family: 'Playfair Display', serif; font-size: 96px; font-weight: 900; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(232,184,154,.35); letter-spacing: -.02em; user-select: none; }
@@ -444,24 +400,22 @@ const marqueeTrack = document.getElementById('marqueeTrack');
 .founder-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .founder-name { font-family: 'Playfair Display', serif; font-size: 17px; font-style: italic; color: var(--warm-white); display: block; margin-bottom: 4px; }
 .founder-role { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,253,248,.35); }
-.about-b { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 80px; position: relative; }
+.about-b { display: flex; flex-direction: column; justify-content: center; padding: 120px 80px; position: relative; }
 .about-b::before { content: 'LOCATIONS'; position: absolute; right: -20px; top: 50%; transform: translateY(-50%); font-family: 'Playfair Display', serif; font-size: clamp(80px,14vw,180px); font-weight: 900; color: rgba(255,253,248,.025); pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: -.02em; }
 .about-b-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 64px; gap: 40px; }
 .about-b-header .about-heading { margin-bottom: 0; }
 .branches-meta { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,253,248,.28); text-align: right; flex-shrink: 0; }
 .branches-meta strong { display: block; font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--terra-light); letter-spacing: 0; margin-bottom: 4px; }
 .branches-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
-.branch-card { background: rgba(255,253,248,.03); border: 1px solid rgba(255,253,248,.06); padding: 40px 36px; position: relative; overflow: hidden; cursor: none; transition: background .35s, transform .35s; }
+.branch-card { background: rgba(255,253,248,.03); border: 1px solid rgba(255,253,248,.06); padding: 40px 36px; position: relative; overflow: hidden; cursor: pointer; transition: background .35s, transform .35s; }
 .branch-card::before { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--terra); transition: width .4s ease; }
-.branch-card:hover { background: rgba(255,253,248,.055); transform: translateY(-4px); }
-.branch-card:hover::before { width: 100%; }
 .branch-num { font-family: 'Playfair Display', serif; font-size: 11px; font-weight: 400; color: var(--terra); letter-spacing: .2em; margin-bottom: 20px; display: block; }
 .branch-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--warm-white); margin-bottom: 8px; line-height: 1.2; }
 .branch-area { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--terra-light); margin-bottom: 20px; display: block; }
 .branch-desc { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; line-height: 1.7; color: rgba(255,253,248,.45); margin-bottom: 28px; }
 .branch-hours { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,253,248,.25); border-top: 1px solid rgba(255,253,248,.07); padding-top: 18px; display: flex; justify-content: space-between; }
 .branch-hours span { color: rgba(255,253,248,.45); }
-.a-reveal { opacity: 0; transform: translateY(36px); transition: opacity .9s ease, transform .9s ease; }
+.a-reveal { opacity: 1; }
 .a-reveal.a-visible { opacity: 1; transform: translateY(0); }
 @media(max-width:900px) {
   .about-a { grid-template-columns: 1fr; }
@@ -484,7 +438,6 @@ const marqueeTrack = document.getElementById('marqueeTrack');
       </div>
     </div>
     <div class="about-a-content a-reveal">
-      <p class="about-eyebrow">Our Roots</p>
       <h2 class="about-heading">Brewed from<br><em>obsession,</em><br>not convenience.</h2>
       <p class="about-body">Café Lumière was born in a narrow lane in the old quarter — a single espresso machine, two stools, and a founder who believed a truly great cup of coffee could change someone's entire morning. Fifteen years on, that belief hasn't changed. We still source every bean by hand, roast in small batches twice a week, and train every barista for three months before they touch the machine.</p>
       <div class="founder-sig">
@@ -496,32 +449,31 @@ const marqueeTrack = document.getElementById('marqueeTrack');
   <div class="about-b" id="locations">
     <div class="about-b-header a-reveal">
       <div>
-        <p class="about-eyebrow">Our Locations</p>
         <h2 class="about-heading">Three spaces,<br>one <em>spirit.</em></h2>
       </div>
       <div class="branches-meta"><strong>3</strong>Branches across<br>the city</div>
     </div>
     <div class="branches-grid">
       <div class="branch-card a-reveal">
-        <span class="branch-num">01</span>
         <h3 class="branch-name">The Original</h3>
         <span class="branch-area">Banjara Hills · Flagship</span>
         <p class="branch-desc">The roastery is in the back, the bar is at the front, and the smell of freshly ground single-origin coffee hits you before you reach the door.</p>
-        <div class="branch-hours">Mon – Sun <span>8:00 AM – 11:00 PM</span></div>
+        <div class="branch-hours">Mon – Sun <span>7:00 AM – 10:00 PM</span></div>
+        <div class="branch-hours" style="border-top:none;padding-top:8px;">Call <span>+91 40 2354 1201</span></div>
       </div>
       <div class="branch-card a-reveal">
-        <span class="branch-num">02</span>
         <h3 class="branch-name">The Loft</h3>
         <span class="branch-area">Jubilee Hills · Dining</span>
         <p class="branch-desc">A full kitchen, an intimate loft space for private events, and our most extensive brunch menu. Designed for guests who linger.</p>
-        <div class="branch-hours">Mon – Sun <span>8:00 AM – 11:00 PM</span></div>
+        <div class="branch-hours">Mon – Sun <span>9:00 AM – 11:00 PM</span></div>
+        <div class="branch-hours" style="border-top:none;padding-top:8px;">Call <span>+91 40 2354 1202</span></div>
       </div>
       <div class="branch-card a-reveal">
-        <span class="branch-num">03</span>
         <h3 class="branch-name">The Kiosk</h3>
         <span class="branch-area">Hitech City · Express</span>
         <p class="branch-desc">Purpose-built for the morning rush. Same quality, same beans, same training — just faster. For the days when the city doesn't slow down.</p>
-        <div class="branch-hours">Mon – Sun <span>8:00 AM – 11:00 PM</span></div>
+        <div class="branch-hours">Mon – Sun <span>6:30 AM – 8:00 PM</span></div>
+        <div class="branch-hours" style="border-top:none;padding-top:8px;">Call <span>+91 40 2354 1203</span></div>
       </div>
     </div>
   </div>
@@ -538,1754 +490,361 @@ const aboutObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 aboutReveal.forEach(el => aboutObserver.observe(el));
 </script>
-
 <!-- =========================================================
-  SECTION 5: MENU SECTION
-  CSS + HTML + JS in one place
+  SECTION 5.5: GALLERY
 ========================================================= -->
 <style>
-
-/* ─── MENU SECTION SHELL ─── */
-.menu-section {
+.gallery-section {
   position: relative;
-  background: #1a0d06;
-  padding: 0;
-  overflow: hidden;
+  background: var(--brown-deep);
+  padding: 120px 80px;
 }
-
-/* ghost word backdrop */
-.menu-section::before {
-  content: 'MENU';
-  position: absolute;
-  top: 60px; left: -20px;
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(120px, 22vw, 260px);
-  font-weight: 900;
-  color: rgba(255,253,248,.018);
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
-  letter-spacing: -.04em;
-  line-height: 1;
-}
-
-/* ─── SECTION HEADER ─── */
-.menu-header {
-  padding: 100px 80px 0;
+.gallery-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 40px;
+  margin-bottom: 56px;
 }
-.menu-header-left {}
-.menu-eyebrow {
-  display: inline-flex; align-items: center; gap: 12px;
-  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
-  color: var(--terra-light);
-  margin-bottom: 20px;
-}
-.menu-eyebrow::before {
-  content: '';
-  width: 28px; height: 1px;
-  background: var(--terra-light); flex-shrink: 0;
-}
-.menu-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(40px, 5vw, 68px);
-  line-height: 1.0;
-  color: var(--warm-white);
-  font-weight: 700;
-}
-.menu-heading em { font-style: italic; color: var(--terra-light); }
-.menu-header-right {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(15px, 1.3vw, 18px);
-  font-weight: 300;
-  line-height: 1.8;
-  color: rgba(255,253,248,.42);
-  max-width: 340px;
-  text-align: right;
-}
-
-/* ─── TAB NAV ─── */
-.menu-tabs-wrap {
-  padding: 56px 80px 0;
-  border-bottom: 1px solid rgba(255,253,248,.07);
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.menu-tabs-wrap::-webkit-scrollbar { display: none; }
-
-.menu-tab {
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  padding: 16px 32px 20px;
-  cursor: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  transition: border-color .3s;
-  margin-bottom: -1px;
-  position: relative;
-}
-.menu-tab-icon {
-  font-size: 18px;
-  opacity: .5;
-  transition: opacity .3s, transform .3s;
-}
-.menu-tab-label {
-  font-size: 10px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: rgba(255,253,248,.35);
-  transition: color .3s;
-}
-.menu-tab.active .menu-tab-icon { opacity: 1; transform: scale(1.15); }
-.menu-tab.active .menu-tab-label { color: var(--terra-light); }
-.menu-tab.active { border-bottom-color: var(--terra); }
-.menu-tab:hover .menu-tab-label { color: rgba(255,253,248,.65); }
-
-/* ─── TAB PANELS ─── */
-.menu-panels { padding: 72px 80px 100px; }
-.menu-panel { display: none; }
-.menu-panel.active { display: block; }
-
-/* ─── PANEL INTRO ─── */
-.panel-intro {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 52px;
-  gap: 40px;
-}
-.panel-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(28px, 3vw, 42px);
-  font-weight: 700;
-  color: var(--warm-white);
-  line-height: 1.1;
-}
-.panel-title em { font-style: italic; color: var(--terra-light); }
-.panel-desc {
+.gallery-header-right {
   font-family: 'Cormorant Garamond', serif;
   font-size: 17px; font-weight: 300; line-height: 1.7;
-  color: rgba(255,253,248,.38);
-  max-width: 360px;
-  text-align: right;
+  color: rgba(255,253,248,.42);
+  max-width: 340px; text-align: right;
 }
-
-/* ─── COFFEE GRID ─── */
-/* 2 large feature cards top, 3 standard below */
-.coffee-grid {
+.gallery-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3px;
-  margin-bottom: 3px;
-}
-.coffee-grid-bottom {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 140px;
   gap: 3px;
 }
-
-/* ─── FOOD GRID ─── */
-/* masonry-feel: 3 col with one tall */
-.food-grid {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 3px;
+.gallery-item { position: relative; overflow: hidden; grid-column: span 2; grid-row: span 2; }
+.gallery-item.wide { grid-column: span 2; grid-row: span 1; }
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: sepia(10%) contrast(1.06) brightness(.88);
+  transition: transform .8s ease, filter .5s ease;
 }
-.food-grid .menu-card:first-child {
-  grid-row: 1 / 3;
-}
-
-/* ─── RECOMMENDED GRID ─── */
-/* Horizontal scrolling featured strip + grid */
-.rec-strip {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 3px;
-  margin-bottom: 3px;
-}
-.rec-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3px;
-}
-
-/* ─── CHEF'S BEST ─── */
-/* editorial: 1 hero + 2 side */
-.chef-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 3px;
-  margin-bottom: 3px;
-}
-.chef-grid-bottom {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
-}
-
-/* ─── FAN FAVS ─── */
-.fans-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
-}
-
-/* ─── BASE MENU CARD ─── */
-.menu-card {
-  position: relative;
-  overflow: hidden;
-  background: rgba(255,253,248,.03);
-  border: 1px solid rgba(255,253,248,.06);
-  cursor: none;
-  transition: transform .4s cubic-bezier(.16,1,.3,1);
-}
-.menu-card:hover { transform: translateY(-5px); z-index: 2; }
-
-.menu-card-img {
-  width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-  display: block;
-  filter: sepia(12%) contrast(1.06) brightness(.9);
-  transition: transform .7s ease, filter .5s ease;
-}
-.menu-card.tall .menu-card-img { aspect-ratio: 3/4; }
-.menu-card.hero-card .menu-card-img { aspect-ratio: 16/9; }
-.menu-card:hover .menu-card-img { transform: scale(1.04); filter: sepia(5%) contrast(1.08) brightness(.95); }
-
-/* image overlay gradient */
-.menu-card-img-wrap {
-  position: relative; overflow: hidden;
-}
-.menu-card-img-wrap::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(20,8,2,.88) 0%, rgba(20,8,2,.2) 50%, transparent 100%);
-  pointer-events: none;
-}
-
-/* badge (tag like "Signature", "Vegan", etc.) */
-.menu-card-badge {
-  position: absolute;
-  top: 16px; left: 16px;
-  font-size: 8.5px; letter-spacing: .22em;
-  text-transform: uppercase;
-  background: var(--terra);
-  color: var(--warm-white);
-  padding: 5px 12px;
-  border-radius: 2px;
-  z-index: 2;
-}
-.menu-card-badge.gold {
-  background: #9a7c3a;
-}
-.menu-card-badge.fan {
-  background: var(--terra-muted);
-}
-
-/* rating stars */
-.menu-card-rating {
-  position: absolute;
-  top: 16px; right: 16px;
-  font-size: 11px;
-  color: #d4a843;
-  letter-spacing: 1px;
-  z-index: 2;
-}
-
-/* card body */
-.menu-card-body {
-  padding: 24px 28px 28px;
-}
-.menu-card-category {
-  font-size: 9px; letter-spacing: .24em;
-  text-transform: uppercase;
-  color: var(--terra);
-  margin-bottom: 8px;
-  display: block;
-}
-.menu-card-name {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(17px, 1.6vw, 22px);
-  font-weight: 700;
-  color: var(--warm-white);
-  line-height: 1.2;
-  margin-bottom: 10px;
-}
-.menu-card-desc {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px; font-weight: 300; line-height: 1.65;
-  color: rgba(255,253,248,.45);
-  margin-bottom: 18px;
-}
-.menu-card-footer {
-  display: flex;
+.gallery-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,8,2,.55), transparent 55%); pointer-events: none; }
+.gallery-cap { position: absolute; left: 16px; bottom: 12px; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,253,248,.7); z-index: 2; }
+.gallery-item { cursor: pointer; }
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10,4,1,.94);
+  display: none;
   align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid rgba(255,253,248,.07);
-  padding-top: 16px;
+  justify-content: center;
+  padding: 60px;
 }
-.menu-card-price {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px; font-weight: 700;
-  color: var(--terra-light);
-}
-.menu-card-price sup {
-  font-size: 13px; font-weight: 400;
-  vertical-align: super;
-  color: rgba(196,98,58,.7);
-}
-.menu-card-tags {
-  display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
-}
-.menu-tag {
-  font-size: 8px; letter-spacing: .18em;
-  text-transform: uppercase;
-  color: rgba(255,253,248,.3);
-  border: 1px solid rgba(255,253,248,.1);
-  padding: 3px 9px; border-radius: 2px;
-}
-
-/* ─── FAN VOTES ─── */
-.fan-votes {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 10px; letter-spacing: .14em;
-  text-transform: uppercase;
-  color: rgba(255,253,248,.3);
-}
-.fan-votes-bar {
-  flex: 1; height: 2px;
+.lightbox.open { display: flex; }
+.lightbox-img-wrap { position: relative; max-width: 1100px; width: 100%; }
+.lightbox img { width: 100%; max-height: 82vh; object-fit: contain; display: block; }
+.lightbox-cap { text-align: center; margin-top: 18px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,253,248,.6); }
+.lightbox-close, .lightbox-prev, .lightbox-next {
+  position: fixed;
   background: rgba(255,253,248,.08);
-  border-radius: 1px;
-  overflow: hidden;
+  border: 1px solid rgba(255,253,248,.18);
+  color: var(--warm-white);
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
 }
-.fan-votes-fill {
-  height: 100%;
-  background: var(--terra);
-  border-radius: 1px;
+.lightbox-close { top: 28px; right: 32px; }
+.lightbox-prev { left: 32px; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: 32px; top: 50%; transform: translateY(-50%); }
+@media(max-width:700px) {
+  .lightbox { padding: 24px; }
+  .lightbox-prev, .lightbox-next { width: 38px; height: 38px; font-size: 15px; }
+  .lightbox-prev { left: 12px; }
+  .lightbox-next { right: 12px; }
+  .lightbox-close { top: 16px; right: 16px; }
 }
-
-/* ─── CHEF CARD SPECIAL ─── */
-.chef-note {
-  background: rgba(196,98,58,.08);
-  border-left: 2px solid var(--terra);
-  padding: 14px 18px;
-  margin-top: 16px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14px; font-style: italic;
-  line-height: 1.6;
-  color: rgba(255,253,248,.5);
-}
-.chef-note strong {
-  display: block;
-  font-style: normal; font-size: 9px;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--terra); margin-bottom: 6px;
-  font-family: 'DM Sans', sans-serif;
-}
-
-/* ─── SCROLL REVEAL ─── */
-.m-reveal {
-  opacity: 0; transform: translateY(28px);
-  transition: opacity .8s ease, transform .8s ease;
-}
-.m-reveal.m-visible { opacity: 1; transform: translateY(0); }
-
-/* ─── RESPONSIVE ─── */
-@media(max-width: 1024px) {
-  .menu-header, .menu-tabs-wrap, .menu-panels { padding-left: 40px; padding-right: 40px; }
-  .rec-grid { grid-template-columns: repeat(2, 1fr); }
-  .chef-grid { grid-template-columns: 1fr; }
-}
-@media(max-width: 768px) {
-  .menu-header { flex-direction: column; align-items: flex-start; padding: 60px 24px 0; }
-  .menu-header-right { text-align: left; max-width: 100%; }
-  .menu-tabs-wrap { padding: 32px 24px 0; gap: 0; }
-  .menu-tab { padding: 12px 18px 16px; }
-  .menu-panels { padding: 48px 24px 80px; }
-  .panel-intro { flex-direction: column; align-items: flex-start; }
-  .panel-desc { text-align: left; max-width: 100%; }
-  .coffee-grid, .food-grid, .rec-strip, .chef-grid, .fans-grid,
-  .coffee-grid-bottom, .rec-grid, .chef-grid-bottom { grid-template-columns: 1fr; }
-  .food-grid .menu-card:first-child { grid-row: auto; }
+@media(max-width:900px) {
+  .gallery-section { padding: 80px 24px; }
+  .gallery-header { flex-direction: column; align-items: flex-start; }
+  .gallery-header-right { text-align: left; max-width: 100%; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+  .gallery-item, .gallery-item.wide { grid-column: span 1; grid-row: span 1; }
 }
 </style>
-<section class="menu-section" id="menu" aria-label="Café Lumière Menu">
-
-  <!-- Header -->
-  <div class="menu-header m-reveal">
-    <div class="menu-header-left">
-      <p class="menu-eyebrow">Our Menu</p>
-      <h2 class="menu-heading">Crafted with<br><em>intention.</em></h2>
+<section class="gallery-section" id="gallery" aria-label="Café Lumière gallery">
+  <div class="gallery-header a-reveal">
+    <div>
+      <h2 class="about-heading">Inside the café,<br>on a normal <em>Tuesday.</em></h2>
     </div>
-    <p class="menu-header-right">
-      Every item on our menu is tested, tasted, and refined until it earns its place. Nothing filler. Nothing frozen. Everything made here.
-    </p>
+    <p class="gallery-header-right">The counter at 7 AM. The last pour of the night. The regulars who've become family. This is what a normal Tuesday looks like.</p>
   </div>
-
-  <!-- Tab nav -->
-  <div class="menu-tabs-wrap" role="tablist" aria-label="Menu categories">
-    <button class="menu-tab active" role="tab" aria-selected="true"  aria-controls="panel-coffee"  data-tab="coffee">
-      <span class="menu-tab-icon">☕</span>
-      <span class="menu-tab-label">Coffee</span>
-    </button>
-    <button class="menu-tab" role="tab" aria-selected="false" aria-controls="panel-food"    data-tab="food">
-      <span class="menu-tab-icon">🍽</span>
-      <span class="menu-tab-label">Food</span>
-    </button>
-    <button class="menu-tab" role="tab" aria-selected="false" aria-controls="panel-rec"     data-tab="rec">
-      <span class="menu-tab-icon">✦</span>
-      <span class="menu-tab-label">Most Recommended</span>
-    </button>
-    <button class="menu-tab" role="tab" aria-selected="false" aria-controls="panel-chef"    data-tab="chef">
-      <span class="menu-tab-icon">👨‍🍳</span>
-      <span class="menu-tab-label">Chef's Best</span>
-    </button>
-    <button class="menu-tab" role="tab" aria-selected="false" aria-controls="panel-fans"    data-tab="fans">
-      <span class="menu-tab-icon">♥</span>
-      <span class="menu-tab-label">Fan Favourites</span>
-    </button>
+  <div class="gallery-grid">
+    <div class="gallery-item a-reveal" onclick="openLightbox(0)"><img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=700&q=80" alt="Barista pulling an espresso shot" loading="lazy"><span class="gallery-cap">The Bar</span></div>
+    <div class="gallery-item wide a-reveal" onclick="openLightbox(1)"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80" alt="Latte art in a ceramic cup" loading="lazy"><span class="gallery-cap">Latte Art</span></div>
+    <div class="gallery-item wide a-reveal" onclick="openLightbox(2)"><img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=700&q=80" alt="Coffee beans being roasted" loading="lazy"><span class="gallery-cap">The Roastery</span></div>
+    <div class="gallery-item a-reveal" onclick="openLightbox(3)"><img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&q=80" alt="Guests seated at Café Lumière" loading="lazy"><span class="gallery-cap">The Loft</span></div>
+    <div class="gallery-item a-reveal" onclick="openLightbox(4)"><img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=700&q=80" alt="Coffee shop interior seating" loading="lazy"><span class="gallery-cap">Morning Light</span></div>
+    <div class="gallery-item wide a-reveal" onclick="openLightbox(5)"><img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1000&q=80" alt="Pastry case at the counter" loading="lazy"><span class="gallery-cap">Fresh Daily</span></div>
   </div>
-
-  <!-- ─────────────────────────────────
-       PANEL 1: COFFEE
-  ───────────────────────────────── -->
-  <div class="menu-panels">
-
-    <div class="menu-panel active" id="panel-coffee" role="tabpanel">
-      <div class="panel-intro m-reveal">
-        <h3 class="panel-title">The <em>coffee</em> bar</h3>
-        <p class="panel-desc">Single-origin, small-batch roasted on-site. Every extraction dialled to the gram.</p>
-      </div>
-
-      <!-- Top 2 feature cards -->
-      <div class="coffee-grid m-reveal">
-        <div class="menu-card hero-card">
-          <div class="menu-card-badge">Signature</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=900&q=80" alt="Lumière Signature Blend espresso">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Espresso · House Blend</span>
-            <h4 class="menu-card-name">Lumière Signature Espresso</h4>
-            <p class="menu-card-desc">A double ristretto built on our house blend — Colombian Huila and Ethiopian Sidama. Notes of dark chocolate, dried cherry, and a cedar-wood finish that lingers.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>280</span>
-              <div class="menu-card-tags">
-                <span class="menu-tag">Dairy-free option</span>
-                <span class="menu-tag">Strong</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card hero-card">
-          <div class="menu-card-badge">New</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=900&q=80" alt="Ethiopian Yirgacheffe pour over coffee">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Pour Over · Single Origin</span>
-            <h4 class="menu-card-name">Ethiopian Yirgacheffe V60</h4>
-            <p class="menu-card-desc">Washed process, light roast. Jasmine florals on the nose, blueberry and lemon curd on the palate. Ground to order. Brewed at 93°C over four minutes.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>380</span>
-              <div class="menu-card-tags">
-                <span class="menu-tag">Black</span>
-                <span class="menu-tag">Light roast</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom 3 standard cards -->
-      <div class="coffee-grid-bottom m-reveal">
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=700&q=80" alt="Oat milk latte">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Latte · Milk Bar</span>
-            <h4 class="menu-card-name">Burnt Honey Oat Latte</h4>
-            <p class="menu-card-desc">Double espresso, steamed oat milk, house-made burnt honey syrup. Sweet, bitter, silky.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>340</span>
-              <div class="menu-card-tags"><span class="menu-tag">Vegan</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80" alt="Nitro cold brew coffee">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Cold Brew · Nitrogen</span>
-            <h4 class="menu-card-name">Nitro Cold Brew</h4>
-            <p class="menu-card-desc">18-hour steep, nitrogen-charged on tap. Cascading, creamy head. No ice, no milk, no compromise.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>360</span>
-              <div class="menu-card-tags"><span class="menu-tag">Vegan</span><span class="menu-tag">Served cold</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=700&q=80" alt="Cardamom cortado">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Cortado · Seasonal</span>
-            <h4 class="menu-card-name">Cardamom Rose Cortado</h4>
-            <p class="menu-card-desc">Ristretto, whole milk, house rose syrup, fresh-ground cardamom. Delicate but confident.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>310</span>
-              <div class="menu-card-tags"><span class="menu-tag">Seasonal</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─────────────────────────────────
-         PANEL 2: FOOD
-    ───────────────────────────────── -->
-    <div class="menu-panel" id="panel-food" role="tabpanel">
-      <div class="panel-intro m-reveal">
-        <h3 class="panel-title">The <em>kitchen</em></h3>
-        <p class="panel-desc">Made from scratch every morning. Bread baked in-house. No shortcuts, ever.</p>
-      </div>
-
-      <div class="food-grid m-reveal">
-        <!-- Tall hero card -->
-        <div class="menu-card tall">
-          <div class="menu-card-badge">Kitchen Special</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=700&q=80" alt="Sourdough ricotta toast with seasonal fruit">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Brunch · Vegetarian</span>
-            <h4 class="menu-card-name">Sourdough Ricotta Toast</h4>
-            <p class="menu-card-desc">House-baked sourdough, whipped ricotta, roasted seasonal stone fruit, wildflower honey, lemon zest, crushed pistachios. Our most photographed plate.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>380</span>
-              <div class="menu-card-tags"><span class="menu-tag">Vegetarian</span><span class="menu-tag">Brunch</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=700&q=80" alt="Almond croissant pastry">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Pastry · Baked Daily</span>
-            <h4 class="menu-card-name">Almond Frangipane Croissant</h4>
-            <p class="menu-card-desc">72-hour laminated dough, filled and baked with frangipane cream, topped with flaked almonds and powdered sugar.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>260</span>
-              <div class="menu-card-tags"><span class="menu-tag">Vegetarian</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&q=80" alt="Shakshuka egg dish">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Brunch · Hot</span>
-            <h4 class="menu-card-name">Spiced Shakshuka</h4>
-            <p class="menu-card-desc">Slow-cooked tomato and pepper sauce, two poached eggs, crumbled feta, fresh herbs. Served with toasted sourdough soldiers.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>420</span>
-              <div class="menu-card-tags"><span class="menu-tag">Vegetarian</span><span class="menu-tag">Gluten-free option</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=700&q=80" alt="French toast with berries">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Brunch · Sweet</span>
-            <h4 class="menu-card-name">Brioche French Toast</h4>
-            <p class="menu-card-desc">House brioche, vanilla custard soak, pan-fried in brown butter. Served with mixed berry compote and crème fraîche.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>390</span>
-              <div class="menu-card-tags"><span class="menu-tag">Sweet</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=700&q=80" alt="Avocado toast with poached eggs">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Brunch · Light</span>
-            <h4 class="menu-card-name">Smashed Avocado Board</h4>
-            <p class="menu-card-desc">Sourdough, smashed avocado with lime and chilli, two soft-poached eggs, dukkah, micro herbs, everything seasoning.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>410</span>
-              <div class="menu-card-tags"><span class="menu-tag">Vegetarian</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─────────────────────────────────
-         PANEL 3: MOST RECOMMENDED
-    ───────────────────────────────── -->
-    <div class="menu-panel" id="panel-rec" role="tabpanel">
-      <div class="panel-intro m-reveal">
-        <h3 class="panel-title">Most <em>recommended</em></h3>
-        <p class="panel-desc">Ordered most often. Reviewed highest. The ones our guests tell their friends about.</p>
-      </div>
-
-      <!-- Top featured strip -->
-      <div class="rec-strip m-reveal">
-        <div class="menu-card hero-card">
-          <div class="menu-card-badge">&#9733; #1 Rated</div>
-          <div class="menu-card-rating">★★★★★</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=900&q=80" alt="Lumière Signature Espresso top rated">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">All-time Best · Espresso</span>
-            <h4 class="menu-card-name">Lumière Signature Espresso</h4>
-            <p class="menu-card-desc">Ordered by 1 in 3 guests. Our most-reviewed item across all platforms. The one that makes people come back the next morning.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>280</span>
-              <div class="menu-card-tags"><span class="menu-tag">4.9 / 5.0</span><span class="menu-tag">2,400+ reviews</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-rating">★★★★★</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=700&q=80" alt="Sourdough ricotta toast">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Food · #2 Most Ordered</span>
-            <h4 class="menu-card-name">Sourdough Ricotta Toast</h4>
-            <p class="menu-card-desc">"Best brunch plate in the city." — consistently top-reviewed on Zomato and Google.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>380</span>
-              <div class="menu-card-tags"><span class="menu-tag">4.8 / 5.0</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-rating">★★★★★</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80" alt="Nitro cold brew">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee · #3 Most Ordered</span>
-            <h4 class="menu-card-name">Nitro Cold Brew</h4>
-            <p class="menu-card-desc">"Life-changing." The drink that made us famous at Hitech City.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>360</span>
-              <div class="menu-card-tags"><span class="menu-tag">4.8 / 5.0</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4-col lower grid -->
-      <div class="rec-grid m-reveal">
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80" alt="Burnt honey oat latte">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee</span>
-            <h4 class="menu-card-name">Burnt Honey Oat Latte</h4>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>340</span>
-              <div class="menu-card-tags"><span class="menu-tag">4.7 / 5.0</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=600&q=80" alt="Almond croissant">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Pastry</span>
-            <h4 class="menu-card-name">Almond Frangipane Croissant</h4>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>260</span>
-              <div class="menu-card-tags"><span class="menu-tag">4.7 / 5.0</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=600&q=80" alt="Cardamom cortado">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee · Seasonal</span>
-            <h4 class="menu-card-name">Cardamom Rose Cortado</h4>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>310</span>
-              <div class="menu-card-tags"><span class="menu-tag">4.6 / 5.0</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="menu-card">
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&q=80" alt="Brioche French toast">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Food · Brunch</span>
-            <h4 class="menu-card-name">Brioche French Toast</h4>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>390</span>
-              <div class="menu-card-tags"><span class="menu-tag">4.6 / 5.0</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─────────────────────────────────
-         PANEL 4: CHEF'S BEST
-    ───────────────────────────────── -->
-    <div class="menu-panel" id="panel-chef" role="tabpanel">
-      <div class="panel-intro m-reveal">
-        <h3 class="panel-title">Chef <em>Mehta's</em> picks</h3>
-        <p class="panel-desc">Dishes our head chef considers the truest expression of what this kitchen is capable of.</p>
-      </div>
-
-      <div class="chef-grid m-reveal">
-        <!-- Hero chef card -->
-        <div class="menu-card hero-card">
-          <div class="menu-card-badge gold">Chef's Finest</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1000&q=80" alt="Chef's special avocado board">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Kitchen · Signature Creation</span>
-            <h4 class="menu-card-name">The Lumière Board</h4>
-            <p class="menu-card-desc">Arjun's take on the ultimate café plate. Sourdough, smashed avocado, confit cherry tomatoes, soft-poached egg, house dukkah, labneh quenelle, and a drizzle of chilli oil pressed in-house. Built to be shared, impossible to resist.</p>
-            <div class="chef-note">
-              <strong>Chef's Note</strong>
-              "This is the plate I'd make if I had one chance to show you what we believe food should be — beautiful, honest, and worth every rupee."
-            </div>
-            <div class="menu-card-footer" style="margin-top:16px">
-              <span class="menu-card-price"><sup>₹</sup>580</span>
-              <div class="menu-card-tags"><span class="menu-tag">Serves 1–2</span><span class="menu-tag">Vegetarian</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Side card -->
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <div class="menu-card">
-            <div class="menu-card-badge gold">Chef's Pick</div>
-            <div class="menu-card-img-wrap">
-              <img class="menu-card-img" src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&q=80" alt="Spiced shakshuka">
-            </div>
-            <div class="menu-card-body">
-              <span class="menu-card-category">Kitchen · Slow Cook</span>
-              <h4 class="menu-card-name">Spiced Shakshuka</h4>
-              <p class="menu-card-desc">Six hours of simmering. The sauce alone takes half a day. This is what patience tastes like.</p>
-              <div class="chef-note">
-                <strong>Chef's Note</strong>
-                "My grandmother's method, my spice blend. Don't rush it."
-              </div>
-              <div class="menu-card-footer" style="margin-top:16px">
-                <span class="menu-card-price"><sup>₹</sup>420</span>
-                <div class="menu-card-tags"><span class="menu-tag">Vegetarian</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="chef-grid-bottom m-reveal">
-        <div class="menu-card">
-          <div class="menu-card-badge gold">Chef's Pick</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=700&q=80" alt="Yirgacheffe pour over">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee · Pour Over</span>
-            <h4 class="menu-card-name">Ethiopian Yirgacheffe V60</h4>
-            <p class="menu-card-desc">The coffee that made Arjun fall in love with the craft. Sourced from Kochere washing station, Grade 1.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>380</span>
-              <div class="menu-card-tags"><span class="menu-tag">Black only</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-badge gold">Chef's Pick</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=700&q=80" alt="Almond croissant">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Pastry · Slow Bake</span>
-            <h4 class="menu-card-name">Almond Frangipane Croissant</h4>
-            <p class="menu-card-desc">Three days of lamination. Arjun's non-negotiable: if the layers aren't visible, it doesn't leave the kitchen.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>260</span>
-              <div class="menu-card-tags"><span class="menu-tag">Baked 6AM daily</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-badge gold">Chef's Pick</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=700&q=80" alt="French toast brioche">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Brunch · Sweet</span>
-            <h4 class="menu-card-name">Brioche French Toast</h4>
-            <p class="menu-card-desc">Brioche baked in-house on Wednesdays and weekends only. The custard soak is a 12-hour overnight recipe.</p>
-            <div class="menu-card-footer">
-              <span class="menu-card-price"><sup>₹</sup>390</span>
-              <div class="menu-card-tags"><span class="menu-tag">Wed & weekends</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─────────────────────────────────
-         PANEL 5: FAN FAVOURITES
-    ───────────────────────────────── -->
-    <div class="menu-panel" id="panel-fans" role="tabpanel">
-      <div class="panel-intro m-reveal">
-        <h3 class="panel-title">The people have <em>spoken.</em></h3>
-        <p class="panel-desc">Voted for by our regulars. The items guests refuse to let us take off the menu.</p>
-      </div>
-
-      <div class="fans-grid m-reveal">
-
-        <div class="menu-card">
-          <div class="menu-card-badge fan">♥ Fan Fav</div>
-          <div class="menu-card-rating">★★★★★</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=700&q=80" alt="Lumière espresso">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee · All-Time #1</span>
-            <h4 class="menu-card-name">Lumière Signature Espresso</h4>
-            <p class="menu-card-desc">"I've had espresso in Rome. This is better." Our most-voted item for three years running.</p>
-            <div class="fan-votes">
-              <div class="fan-votes-bar"><div class="fan-votes-fill" style="width:97%"></div></div>
-              <span>97%</span>
-            </div>
-            <div class="menu-card-footer" style="margin-top:14px">
-              <span class="menu-card-price"><sup>₹</sup>280</span>
-              <div class="menu-card-tags"><span class="menu-tag">2,400+ votes</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-badge fan">♥ Fan Fav</div>
-          <div class="menu-card-rating">★★★★★</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80" alt="Nitro cold brew">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee · Cold</span>
-            <h4 class="menu-card-name">Nitro Cold Brew</h4>
-            <p class="menu-card-desc">"I drive 40 minutes for this." Our most shared item on Instagram. Queues form at Hitech City before we open.</p>
-            <div class="fan-votes">
-              <div class="fan-votes-bar"><div class="fan-votes-fill" style="width:91%"></div></div>
-              <span>91%</span>
-            </div>
-            <div class="menu-card-footer" style="margin-top:14px">
-              <span class="menu-card-price"><sup>₹</sup>360</span>
-              <div class="menu-card-tags"><span class="menu-tag">1,800+ votes</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-badge fan">♥ Fan Fav</div>
-          <div class="menu-card-rating">★★★★★</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=700&q=80" alt="Ricotta toast">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Food · Brunch</span>
-            <h4 class="menu-card-name">Sourdough Ricotta Toast</h4>
-            <p class="menu-card-desc">"I've ordered this 47 times. I counted." Our most photographed dish. The one people bring their parents for.</p>
-            <div class="fan-votes">
-              <div class="fan-votes-bar"><div class="fan-votes-fill" style="width:88%"></div></div>
-              <span>88%</span>
-            </div>
-            <div class="menu-card-footer" style="margin-top:14px">
-              <span class="menu-card-price"><sup>₹</sup>380</span>
-              <div class="menu-card-tags"><span class="menu-tag">1,600+ votes</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-badge fan">♥ Fan Fav</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=700&q=80" alt="Burnt honey latte">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee · Seasonal</span>
-            <h4 class="menu-card-name">Burnt Honey Oat Latte</h4>
-            <p class="menu-card-desc">"Please never take this off the menu." — every single person who tried it during the trial week.</p>
-            <div class="fan-votes">
-              <div class="fan-votes-bar"><div class="fan-votes-fill" style="width:83%"></div></div>
-              <span>83%</span>
-            </div>
-            <div class="menu-card-footer" style="margin-top:14px">
-              <span class="menu-card-price"><sup>₹</sup>340</span>
-              <div class="menu-card-tags"><span class="menu-tag">1,200+ votes</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-badge fan">♥ Fan Fav</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=700&q=80" alt="Almond croissant">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Pastry · Morning</span>
-            <h4 class="menu-card-name">Almond Frangipane Croissant</h4>
-            <p class="menu-card-desc">"Sold out by 9AM every weekend. I set an alarm." The one item we never have enough of.</p>
-            <div class="fan-votes">
-              <div class="fan-votes-bar"><div class="fan-votes-fill" style="width:79%"></div></div>
-              <span>79%</span>
-            </div>
-            <div class="menu-card-footer" style="margin-top:14px">
-              <span class="menu-card-price"><sup>₹</sup>260</span>
-              <div class="menu-card-tags"><span class="menu-tag">980+ votes</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu-card">
-          <div class="menu-card-badge fan">♥ Fan Fav</div>
-          <div class="menu-card-img-wrap">
-            <img class="menu-card-img" src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=700&q=80" alt="Cardamom cortado">
-          </div>
-          <div class="menu-card-body">
-            <span class="menu-card-category">Coffee · Seasonal</span>
-            <h4 class="menu-card-name">Cardamom Rose Cortado</h4>
-            <p class="menu-card-desc">"I come every Sunday just for this." Our most emotionally reviewed drink. People write poetry about it.</p>
-            <div class="fan-votes">
-              <div class="fan-votes-bar"><div class="fan-votes-fill" style="width:74%"></div></div>
-              <span>74%</span>
-            </div>
-            <div class="menu-card-footer" style="margin-top:14px">
-              <span class="menu-card-price"><sup>₹</sup>310</span>
-              <div class="menu-card-tags"><span class="menu-tag">860+ votes</span></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div><!-- end .menu-panels -->
-
 </section>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Gallery image viewer">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+  <button class="lightbox-prev" onclick="stepLightbox(-1)" aria-label="Previous image">‹</button>
+  <div class="lightbox-img-wrap">
+    <img id="lightboxImg" src="" alt="">
+    <p class="lightbox-cap" id="lightboxCap"></p>
+  </div>
+  <button class="lightbox-next" onclick="stepLightbox(1)" aria-label="Next image">›</button>
+</div>
 <script>
-// ── MENU TABS ──
-document.querySelectorAll('.menu-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    const target = tab.dataset.tab;
-    document.querySelectorAll('.menu-tab').forEach(t => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    tab.setAttribute('aria-selected', 'true');
-    const panel = document.getElementById('panel-' + target);
-    if (panel) {
-      panel.classList.add('active');
-      // re-trigger reveal on newly shown cards
-      panel.querySelectorAll('.m-reveal').forEach(el => {
-        el.classList.remove('m-visible');
-        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('m-visible')));
-      });
-    }
-  });
+const galleryPhotos = [
+  { src: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=1600&q=85", cap: "The Bar" },
+  { src: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&q=85", cap: "Latte Art" },
+  { src: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=1600&q=85", cap: "The Roastery" },
+  { src: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1600&q=85", cap: "The Loft" },
+  { src: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1600&q=85", cap: "Morning Light" },
+  { src: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1600&q=85", cap: "Fresh Daily" }
+];
+let lightboxIndex = 0;
+function renderLightbox() {
+  const photo = galleryPhotos[lightboxIndex];
+  document.getElementById('lightboxImg').src = photo.src;
+  document.getElementById('lightboxImg').alt = photo.cap;
+  document.getElementById('lightboxCap').textContent = photo.cap;
+}
+function openLightbox(i) {
+  lightboxIndex = i;
+  renderLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function stepLightbox(delta) {
+  lightboxIndex = (lightboxIndex + delta + galleryPhotos.length) % galleryPhotos.length;
+  renderLightbox();
+}
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target.id === 'lightbox') closeLightbox();
 });
-
-// ── MENU SCROLL REVEAL ──
-const mReveal = document.querySelectorAll('.m-reveal');
-const mObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('m-visible'); mObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08 });
-mReveal.forEach(el => mObs.observe(el));
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') stepLightbox(-1);
+  if (e.key === 'ArrowRight') stepLightbox(1);
+});
 </script>
-
-
-
 <!-- =========================================================
-  SECTION 6: RESERVE + PAY SECTION
-  CSS + HTML + JS in one place
-  Paste/remove this whole block as one section.
+  SECTION 5.7: TESTIMONIALS
 ========================================================= -->
 <style>
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  .reserve-section {
-    --bg-deep:    #1a1008;
-    --bg-dark:    #231508;
-    --bg-card:    #2b1c0e;
-    --bg-input:   #1e1208;
-    --border:     rgba(180, 120, 60, 0.18);
-    --border-hover: rgba(200, 140, 70, 0.4);
-    --accent:     #c8783c;
-    --accent-light: #e09255;
-    --accent-glow: rgba(200, 120, 60, 0.15);
-    --text-primary: #f0e4d0;
-    --text-muted:  #9e8672;
-    --text-faint:  #6b5540;
-    --gold:       #d4a855;
-  }
-
-  .reserve-section {
-    padding: 100px 0 80px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Subtle noise texture overlay */
-  .reserve-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.6;
-  }
-
-  .reserve-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 48px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Section Header */
-  .section-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-label::before {
-    content: '';
-    width: 28px;
-    height: 1px;
-    background: var(--accent);
-    opacity: 0.7;
-    display: inline-block;
-  }
-
-  .section-heading {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(38px, 5vw, 58px);
-    font-weight: 400;
-    line-height: 1.1;
-    color: var(--text-primary);
-    margin-bottom: 16px;
-  }
-  .section-heading em {
-    font-style: italic;
-    color: var(--accent);
-  }
-
-  .section-sub {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
-    font-weight: 300;
-    color: var(--text-muted);
-    max-width: 480px;
-    line-height: 1.7;
-    margin-bottom: 60px;
-  }
-
-  /* Tab Nav */
-  .tab-nav {
-    display: flex;
-    gap: 0;
-    margin-bottom: 48px;
-    border-bottom: 1px solid var(--border);
-    width: fit-content;
-  }
-
-  .tab-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-    padding: 12px 28px 14px;
-    position: relative;
-    transition: color 0.25s;
-  }
-  .tab-btn::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
-  .tab-btn.active {
-    color: var(--accent-light);
-  }
-  .tab-btn.active::after {
-    transform: scaleX(1);
-  }
-  .tab-btn:hover:not(.active) {
-    color: var(--text-muted);
-  }
-
-  /* Tab Panels */
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; animation: fadeUp 0.4s ease; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Layout grid */
-  .panel-grid {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 40px;
-    align-items: start;
-  }
-
-  /* Form styles */
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .form-row.single { grid-template-columns: 1fr; }
-  .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .reserve-section label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-  }
-
-  .reserve-section input, .reserve-section select, .reserve-section textarea {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    color: var(--text-primary);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
-    padding: 13px 16px;
-    outline: none;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
-  }
-  .reserve-section input::placeholder, .reserve-section textarea::placeholder { color: var(--text-faint); }
-  .reserve-section input:focus, .reserve-section select:focus, .reserve-section textarea:focus { border-color: var(--border-hover); }
-  .reserve-section select { cursor: pointer; }
-  .reserve-section select option { background: var(--bg-dark); }
-  .reserve-section textarea { resize: vertical; min-height: 90px; }
-
-  /* Location chips */
-  .location-chips {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-  .chip {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 10px 20px;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .chip:hover { border-color: var(--border-hover); color: var(--text-primary); }
-  .chip.selected {
-    background: var(--accent-glow);
-    border-color: var(--accent);
-    color: var(--accent-light);
-  }
-  .chip-label { font-size: 9px; display: block; color: var(--text-faint); margin-top: 3px; letter-spacing: 0.1em; }
-
-  /* CTA Button */
-  .btn-primary {
-    display: block;
-    width: 100%;
-    background: var(--accent);
-    border: none;
-    border-radius: 2px;
-    color: #1a1008;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 16px 32px;
-    margin-top: 24px;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
-  .btn-primary:active { transform: translateY(0); }
-
-  .btn-outline {
-    display: block;
-    width: 100%;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    padding: 14px 32px;
-    margin-top: 10px;
-    transition: all 0.2s;
-  }
-  .btn-outline:hover { border-color: var(--border-hover); color: var(--text-primary); }
-
-  /* Sidebar card */
-  .sidebar-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 28px 24px;
-  }
-
-  .sidebar-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 400;
-    color: var(--text-primary);
-    margin-bottom: 6px;
-  }
-  .sidebar-sub {
-    font-size: 12px;
-    color: var(--text-faint);
-    margin-bottom: 24px;
-    line-height: 1.6;
-  }
-
-  /* Platform links — Zomato / Swiggy */
-  .platform-link {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    background: var(--bg-input);
-    margin-bottom: 10px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .platform-link:hover {
-    border-color: var(--border-hover);
-    background: rgba(200, 120, 60, 0.06);
-  }
-
-  .platform-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  .icon-zomato { background: #cb202d; color: #fff; font-size: 11px; letter-spacing: -0.02em; }
-  .icon-swiggy { background: #fc8019; color: #fff; font-size: 11px; }
-
-  .platform-info { flex: 1; }
-  .platform-name {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-primary);
-    display: block;
-  }
-  .platform-desc {
-    font-size: 11px;
-    color: var(--text-faint);
-    display: block;
-    margin-top: 2px;
-  }
-
-  .platform-arrow {
-    color: var(--text-faint);
-    font-size: 16px;
-    transition: transform 0.2s, color 0.2s;
-  }
-  .platform-link:hover .platform-arrow {
-    transform: translateX(3px);
-    color: var(--accent);
-  }
-
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 24px 0;
-  }
-
-  /* Pay bill section */
-  .pay-info {
-    font-size: 12px;
-    color: var(--text-faint);
-    line-height: 1.7;
-    margin-bottom: 20px;
-  }
-
-  .bill-lookup {
-    display: flex;
-    gap: 8px;
-  }
-  .bill-lookup input { flex: 1; }
-  .bill-lookup button {
-    background: var(--accent);
-    border: none;
-    border-radius: 2px;
-    color: #1a1008;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    padding: 0 18px;
-    white-space: nowrap;
-    transition: background 0.2s;
-  }
-  .bill-lookup button:hover { background: var(--accent-light); }
-
-  /* Payment methods */
-  .pay-methods {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-    flex-wrap: wrap;
-  }
-  .pay-method {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 8px 14px;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .pay-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
-
-  /* Decorative rule */
-  .ornament {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    color: var(--text-faint);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 28px;
-  }
-  .ornament::before, .ornament::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--border));
-  }
-  .ornament::after {
-    background: linear-gradient(to left, transparent, var(--border));
-  }
-
-  /* Success message */
-  .success-msg {
-    display: none;
-    background: rgba(15, 110, 86, 0.15);
-    border: 1px solid rgba(15, 110, 86, 0.3);
-    border-radius: 2px;
-    padding: 14px 18px;
-    font-size: 13px;
-    color: #5DCAA5;
-    margin-top: 16px;
-    text-align: center;
-  }
-
-  /* Floating accent line */
-  .accent-bar {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 3px;
-    height: 120px;
-    background: linear-gradient(to bottom, var(--accent), transparent);
-    opacity: 0.5;
-  }
-
-  @media (max-width: 860px) {
-    .panel-grid { grid-template-columns: 1fr; }
-    .reserve-container { padding: 0 24px; }
-    .form-row.triple { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 560px) {
-    .form-row, .form-row.triple { grid-template-columns: 1fr; }
-  }
-
+.testimonial-section {
+  position: relative;
+  background: #1a0d06;
+  padding: 120px 80px;
+  overflow: hidden;
+}
+.testimonial-section::before {
+  content: '“';
+  position: absolute;
+  top: -40px; left: 40px;
+  font-family: 'Playfair Display', serif;
+  font-size: 420px;
+  color: rgba(255,253,248,.02);
+  line-height: 1;
+  pointer-events: none;
+}
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 56px;
+}
+.testimonial-card {
+  background: rgba(255,253,248,.03);
+  border: 1px solid rgba(255,253,248,.06);
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.testimonial-stars { color: #d4a843; font-size: 13px; letter-spacing: 2px; }
+.testimonial-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 300; font-style: italic;
+  line-height: 1.65;
+  color: rgba(255,253,248,.72);
+  flex: 1;
+}
+.testimonial-person { display: flex; align-items: center; gap: 14px; border-top: 1px solid rgba(255,253,248,.08); padding-top: 20px; }
+.testimonial-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--terra-muted);
+  color: var(--warm-white);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700;
+  flex-shrink: 0;
+}
+.testimonial-name { font-size: 13px; color: var(--warm-white); display: block; }
+.testimonial-meta { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,253,248,.32); margin-top: 2px; }
+@media(max-width:900px) {
+  .testimonial-section { padding: 80px 24px; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+}
 </style>
-<section class="reserve-section" id="reserve">
-  <div class="accent-bar"></div>
-  <div class="reserve-container">
-
-    <div class="section-label">Reserve &amp; Dine</div>
-    <h2 class="section-heading">Secure your seat,<br><em>savour the moment.</em></h2>
-    <p class="section-sub">Every table is set with care. Book directly with us or through your preferred platform — we'll have a seat waiting.</p>
-
-    <!-- Tab Nav -->
-    <div class="tab-nav">
-      <button class="tab-btn active" onclick="switchTab('reserve', this)">Reserve a Table</button>
-      <button class="tab-btn" onclick="switchTab('pay', this)">Pay Your Bill</button>
-    </div>
-
-    <!-- RESERVE TAB -->
-    <div class="tab-panel active" id="tab-reserve">
-      <div class="panel-grid">
-
-        <!-- Form -->
-        <div>
-          <div class="location-chips" id="locationChips">
-            <div class="chip selected" onclick="selectChip(this)">
-              The Original
-              <span class="chip-label">Indiranagar</span>
-            </div>
-            <div class="chip" onclick="selectChip(this)">
-              The Loft
-              <span class="chip-label">Koramangala</span>
-            </div>
-            <div class="chip" onclick="selectChip(this)">
-              The Kiosk
-              <span class="chip-label">MG Road</span>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="field">
-              <label for="fname">First Name</label>
-              <input type="text" id="fname" placeholder="Arjun">
-            </div>
-            <div class="field">
-              <label for="lname">Last Name</label>
-              <input type="text" id="lname" placeholder="Mehta">
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="field">
-              <label for="email">Email</label>
-              <input type="email" id="email" placeholder="arjun@email.com">
-            </div>
-            <div class="field">
-              <label for="phone">Phone</label>
-              <input type="tel" id="phone" placeholder="+91 98765 43210">
-            </div>
-          </div>
-
-          <div class="form-row triple">
-            <div class="field">
-              <label for="rdate">Date</label>
-              <input type="date" id="rdate">
-            </div>
-            <div class="field">
-              <label for="rtime">Time</label>
-              <select id="rtime">
-                <option value="">Select</option>
-                <option>8:00 AM</option>
-                <option>7:30 AM</option>
-                <option>8:00 AM</option>
-                <option>9:00 AM</option>
-                <option>10:00 AM</option>
-                <option>11:00 AM</option>
-                <option>12:00 PM</option>
-                <option>1:00 PM</option>
-                <option>6:00 PM</option>
-                <option>7:00 PM</option>
-                <option>8:00 PM</option>
-                <option>9:00 PM</option>
-                <option>10:00 PM</option>
-                <option>11:00 PM</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="guests">Guests</label>
-              <select id="guests">
-                <option>1 person</option>
-                <option selected>2 people</option>
-                <option>3 people</option>
-                <option>4 people</option>
-                <option>5 people</option>
-                <option>6+ people</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row single">
-            <div class="field">
-              <label for="notes">Special Requests</label>
-              <textarea id="notes" placeholder="Anniversary dinner, window seat, dietary requirements…"></textarea>
-            </div>
-          </div>
-
-          <button class="btn-primary" onclick="handleReserve()">Confirm Reservation</button>
-          <div class="success-msg" id="reserveSuccess">✓ &nbsp;Your table is confirmed. We'll send a reminder to your email.</div>
-        </div>
-
-        <!-- Sidebar -->
-        <div>
-          <div class="sidebar-card">
-            <p class="sidebar-title">Book via Platform</p>
-            <p class="sidebar-sub">Prefer to reserve through Zomato or Swiggy Dineout? We're listed on both.</p>
-
-            <a class="platform-link" href="https://www.zomato.com" target="_blank">
-              <div class="platform-icon icon-zomato">Z</div>
-              <div class="platform-info">
-                <span class="platform-name">Zomato Dining</span>
-                <span class="platform-desc">Reserve & earn Zomato credits</span>
-              </div>
-              <span class="platform-arrow">›</span>
-            </a>
-
-            <a class="platform-link" href="https://www.swiggy.com/dineout" target="_blank">
-              <div class="platform-icon icon-swiggy">S</div>
-              <div class="platform-info">
-                <span class="platform-name">Swiggy Dineout</span>
-                <span class="platform-desc">Exclusive Swiggy ONE discounts</span>
-              </div>
-              <span class="platform-arrow">›</span>
-            </a>
-
-            <hr class="divider">
-
-            <p style="font-size: 11px; color: var(--text-faint); line-height: 1.8;">
-              Bookings made directly receive priority seating and our complimentary welcome coffee.
-            </p>
-
-            <hr class="divider">
-
-            <p style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px;">Hours</p>
-            <div style="font-size: 12px; color: var(--text-muted); line-height: 2;">
-              <div style="display:flex; justify-content:space-between;"><span>The Original</span><span style="color:var(--text-faint)">7:00 AM – 10:00 PM</span></div>
-              <div style="display:flex; justify-content:space-between;"><span>The Loft</span><span style="color:var(--text-faint)">9:00 AM – 11:00 PM</span></div>
-              <div style="display:flex; justify-content:space-between;"><span>The Kiosk</span><span style="color:var(--text-faint)">6:30 AM – 8:00 PM</span></div>
-            </div>
-          </div>
-        </div>
-
+<section class="testimonial-section" aria-label="Guest testimonials">
+  <h2 class="about-heading a-reveal">Words we<br>didn't write <em>ourselves.</em></h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card a-reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">We came in for a quick coffee before a meeting and ended up staying for two hours. The Yirgacheffe pour-over alone was worth the trip across town.</p>
+      <div class="testimonial-person">
+        <div class="testimonial-avatar">RK</div>
+        <div><span class="testimonial-name">Ritika Kapoor</span><span class="testimonial-meta">The Original · Banjara Hills</span></div>
       </div>
     </div>
-
-    <!-- PAY BILL TAB -->
-    <div class="tab-panel" id="tab-pay">
-      <div class="panel-grid">
-
-        <!-- Pay Form -->
-        <div>
-          <p style="font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 300; color: var(--text-muted); margin-bottom: 32px; line-height: 1.6;">
-            Settle your bill from the table or after you leave — no waiting, no fuss.
-          </p>
-
-          <div class="form-row">
-            <div class="field">
-              <label for="tablenum">Table Number</label>
-              <input type="text" id="tablenum" placeholder="e.g. T-12">
-            </div>
-            <div class="field">
-              <label for="billcode">Bill Code</label>
-              <input type="text" id="billcode" placeholder="Shown on your receipt">
-            </div>
-          </div>
-
-          <div class="ornament">or look up by phone</div>
-
-          <div class="bill-lookup">
-            <input type="tel" id="billphone" placeholder="Registered phone number">
-            <button onclick="lookupBill()">Look Up</button>
-          </div>
-
-          <div id="billResult" style="display:none; margin-top: 24px;">
-            <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 2px; padding: 24px;">
-              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 20px;">
-                <span style="font-family:'Playfair Display',serif; font-size:22px;">Bill Summary</span>
-                <span style="font-size: 11px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase;">Table T-12 · The Original</span>
-              </div>
-              <div style="border-top: 1px solid var(--border); padding-top: 16px;">
-                <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px;"><span>Lumière Signature Espresso × 2</span><span>₹560</span></div>
-                <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px;"><span>Sourdough Ricotta Toast × 1</span><span>₹380</span></div>
-                <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px;"><span>Brioche French Toast × 1</span><span>₹390</span></div>
-                <div style="border-top: 1px solid var(--border); margin: 14px 0;"></div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-faint); margin-bottom:6px;"><span>Subtotal</span><span>₹1,330</span></div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-faint); margin-bottom:6px;"><span>GST (5%)</span><span>₹67</span></div>
-                <div style="display:flex; justify-content:space-between; font-size:16px; color:var(--text-primary); font-weight:500; margin-top:10px;"><span>Total</span><span style="color:var(--accent)">₹1,397</span></div>
-              </div>
-              <button class="btn-primary" onclick="handlePay()">Pay ₹1,397</button>
-            </div>
-          </div>
-
-          <div class="success-msg" id="paySuccess" style="margin-top:16px;">✓ &nbsp;Payment received. Thank you — hope to see you again soon.</div>
-
-          <div style="margin-top: 32px;">
-            <p style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 14px;">We accept</p>
-            <div class="pay-methods">
-              <div class="pay-method"><div class="pay-dot"></div>UPI</div>
-              <div class="pay-method"><div class="pay-dot"></div>Credit / Debit</div>
-              <div class="pay-method"><div class="pay-dot"></div>Net Banking</div>
-              <div class="pay-method"><div class="pay-dot"></div>Wallets</div>
-              <div class="pay-method"><div class="pay-dot"></div>Cash</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sidebar -->
-        <div>
-          <div class="sidebar-card">
-            <p class="sidebar-title">Pay via Platform</p>
-            <p class="sidebar-sub">If you booked through Zomato or Swiggy, you can pay directly from those apps.</p>
-
-            <a class="platform-link" href="https://www.zomato.com" target="_blank">
-              <div class="platform-icon icon-zomato">Z</div>
-              <div class="platform-info">
-                <span class="platform-name">Pay via Zomato</span>
-                <span class="platform-desc">Earn rewards on every payment</span>
-              </div>
-              <span class="platform-arrow">›</span>
-            </a>
-
-            <a class="platform-link" href="https://www.swiggy.com/dineout" target="_blank">
-              <div class="platform-icon icon-swiggy">S</div>
-              <div class="platform-info">
-                <span class="platform-name">Pay via Swiggy</span>
-                <span class="platform-desc">Swiggy ONE cashback applies</span>
-              </div>
-              <span class="platform-arrow">›</span>
-            </a>
-
-            <hr class="divider">
-
-            <p style="font-size: 11px; color: var(--text-faint); line-height: 1.8;">
-              Need help with your bill? Ask your server for a printed receipt or email us at <span style="color: var(--accent);">hello@cafelumiere.in</span>
-            </p>
-          </div>
-        </div>
-
+    <div class="testimonial-card a-reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">I've eaten brunch at a lot of places in this city. The sourdough ricotta toast at The Loft is genuinely in a different category.</p>
+      <div class="testimonial-person">
+        <div class="testimonial-avatar">SV</div>
+        <div><span class="testimonial-name">Sameer Verma</span><span class="testimonial-meta">The Loft · Jubilee Hills</span></div>
       </div>
     </div>
-
+    <div class="testimonial-card a-reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">The Kiosk gets my order right in under three minutes, every single morning, without fail. That kind of consistency is rare.</p>
+      <div class="testimonial-person">
+        <div class="testimonial-avatar">AN</div>
+        <div><span class="testimonial-name">Aisha Nair</span><span class="testimonial-meta">The Kiosk · Hitech City</span></div>
+      </div>
+    </div>
   </div>
 </section>
 <script>
-
-  function switchTab(tab, btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + tab).classList.add('active');
-  }
-
-  function selectChip(el) {
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-  }
-
-  function handleReserve() {
-    const msg = document.getElementById('reserveSuccess');
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 5000);
-  }
-
-  function lookupBill() {
-    document.getElementById('billResult').style.display = 'block';
-  }
-
-  function handlePay() {
-    document.getElementById('billResult').style.display = 'none';
-    const msg = document.getElementById('paySuccess');
-    msg.style.display = 'block';
-  }
-
-  // Set min date to today
-  const d = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  document.getElementById('rdate').min = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  document.getElementById('rdate').value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-
+document.querySelectorAll('.gallery-item, .testimonial-card, .testimonial-section .about-heading').forEach(el => {
+  el.classList.add('a-reveal');
+  aboutObserver.observe(el);
+});
+</script>
+<!-- =========================================================
+  SECTION 7: FOOTER
+========================================================= -->
+<style>
+.site-footer {
+  position: relative;
+  background: var(--brown-deep);
+  border-top: 1px solid rgba(255,253,248,.07);
+  padding: 88px 80px 40px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.1fr;
+  gap: 48px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid rgba(255,253,248,.07);
+}
+.footer-brand-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--warm-white); margin-bottom: 18px; }
+.footer-brand-logo em { font-style: italic; color: var(--terra-light); }
+.footer-brand-desc { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; line-height: 1.75; color: rgba(255,253,248,.42); max-width: 300px; margin-bottom: 26px; }
+.footer-col-title { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--terra-light); margin-bottom: 22px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+.footer-links a { color: rgba(255,253,248,.5); text-decoration: none; font-size: 13.5px; transition: color .3s; }
+.footer-branch { margin-bottom: 20px; }
+.footer-branch:last-child { margin-bottom: 0; }
+.footer-branch-name { font-size: 13.5px; color: var(--warm-white); margin-bottom: 4px; display: block; }
+.footer-branch-addr { font-size: 12px; color: rgba(255,253,248,.38); line-height: 1.6; }
+.footer-newsletter-desc { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 300; line-height: 1.7; color: rgba(255,253,248,.42); margin-bottom: 22px; }
+.footer-newsletter-form { display: flex; border: 1px solid rgba(255,253,248,.15); border-radius: 2px; overflow: hidden; }
+.footer-newsletter-form input {
+  flex: 1; background: none; border: none; outline: none;
+  padding: 13px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  color: var(--warm-white);
+}
+.footer-newsletter-form input::placeholder { color: rgba(255,253,248,.32); }
+.footer-newsletter-form button {
+  background: var(--terra); color: var(--warm-white); border: none;
+  padding: 0 18px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  cursor: pointer; transition: background .3s;
+  flex-shrink: 0;
+}
+.footer-newsletter-msg { font-size: 11.5px; color: var(--terra-light); margin-top: 12px; display: none; }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; padding-top: 32px; flex-wrap: wrap;
+}
+.footer-copy { font-size: 11.5px; color: rgba(255,253,248,.3); }
+.footer-legal { display: flex; gap: 28px; }
+.footer-legal a { font-size: 11.5px; color: rgba(255,253,248,.3); text-decoration: none; transition: color .3s; }
+@media(max-width:1024px) {
+  .footer-top { grid-template-columns: 1fr 1fr; row-gap: 44px; }
+}
+@media(max-width:640px) {
+  .site-footer { padding: 64px 24px 32px; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+</style>
+<footer class="site-footer" aria-label="Site footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-logo">Café <em>Lumière</em></div>
+      <p class="footer-brand-desc">Small-batch roasted, hand-poured, made from scratch — since 2009. Three rooms across Hyderabad, one standard.</p>
+    </div>
+    <div>
+      <p class="footer-col-title">Explore</p>
+      <ul class="footer-links">
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="reserve.html">Reserve a Table</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Visit Us</p>
+      <div class="footer-branch">
+        <span class="footer-branch-name">The Original</span>
+        <p class="footer-branch-addr">Road No. 12, Banjara Hills, Hyderabad<br>+91 40 2354 1201</p>
+      </div>
+      <div class="footer-branch">
+        <span class="footer-branch-name">The Loft</span>
+        <p class="footer-branch-addr">Road No. 45, Jubilee Hills, Hyderabad<br>+91 40 2354 1202</p>
+      </div>
+      <div class="footer-branch">
+        <span class="footer-branch-name">The Kiosk</span>
+        <p class="footer-branch-addr">Cyber Towers, Hitech City, Hyderabad<br>+91 40 2354 1203</p>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Stay in the Loop</p>
+      <p class="footer-newsletter-desc">New seasonal drinks, menu drops, and the odd table for two — straight to your inbox.</p>
+      <form class="footer-newsletter-form" onsubmit="return handleNewsletter(event)">
+        <input type="email" placeholder="Your email address" required aria-label="Email address for newsletter">
+        <button type="submit">Join</button>
+      </form>
+      <p class="footer-newsletter-msg" id="newsletterMsg">✓ You're on the list. Welcome to Lumière.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© <span id="year"></span> Café Lumière. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="mailto:hello@cafelumiere.in">hello@cafelumiere.in</a>
+    </div>
+  </div>
+</footer>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+function handleNewsletter(e) {
+  e.preventDefault();
+  const msg = document.getElementById('newsletterMsg');
+  msg.style.display = 'block';
+  e.target.reset();
+  setTimeout(() => { msg.style.display = 'none'; }, 5000);
+  return false;
+}
 </script>
 
 </body>
